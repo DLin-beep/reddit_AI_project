@@ -1,0 +1,47 @@
+# Local environments
+.venv/
+venv/
+env/
+.python-version
+
+# Python/runtime caches
+__pycache__/
+*.py[cod]
+*$py.class
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.ipynb_checkpoints/
+
+# OS/editor state
+.DS_Store
+.vscode/
+.idea/
+
+# Secrets and local config
+.env
+.env.*
+!.env.example
+
+# Raw Reddit data and generated measurement inputs
+data/*
+!data/
+!data/README.md
+!data/acsi_data_rubric.md
+!data/acsi_scores.csv
+
+# Generated outputs and caches
+output/
+data/cache/
+
+# Large derived artifacts
+*.parquet
+*.feather
+*.pkl
+*.pickle
+
+# Logs and temp files
+*.log
+*.tmp
+tmp/
+temp/
