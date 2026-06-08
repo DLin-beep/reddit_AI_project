@@ -1,7 +1,6 @@
 # ACSI Post Coding Rubric
 
-Code each row from the visible subreddit, title, and body. Do not use
-regression results to decide scores.
+Code each row from the visible subreddit, title, and body.
 
 Every score must be exactly one of: `0`, `1`, `2`, `3`.
 
@@ -193,6 +192,6 @@ subreddit-level regressors:
 Do not treat the single aggregate ACSI/GSE number as the primary model. It is a
 supporting diagnostic only.
 
-For compatibility with existing output files, `scripts/acsi_manual_batch.py`
+For compatibility with existing output files, `scripts/annotate.py aggregate`
 may still write `gse` to `data/acsi_scores.csv`, but `scripts/run.py` should
 report the three-dimensional model as the main specification.
