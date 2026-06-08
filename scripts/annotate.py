@@ -7,9 +7,9 @@ This file owns the annotation workflow end to end:
 """
 
 
-# ---------------------------------------------------------------------------
-# Annotation sample construction.
-# ---------------------------------------------------------------------------
+
+
+
 
 import argparse
 import json
@@ -249,8 +249,8 @@ def seek_position_for_created_utc(path, target_created_utc):
                 candidate = pos
                 high = mid
 
-    # Step back a little so small local ordering irregularities do not skip
-    # eligible rows immediately before the binary-search boundary.
+
+
     return max(0, candidate - 1_000_000)
 
 
@@ -642,9 +642,9 @@ def build_main(argv=None):
             continue
         print(f"{key}: {value}")
 
-# ---------------------------------------------------------------------------
-# Manual dual-pass coding workflow.
-# ---------------------------------------------------------------------------
+
+
+
 
 DEFAULT_INPUT = ROOT / "data" / "acsi_data.csv"
 DEFAULT_RUN1_OUTPUT = ROOT / "data" / "acsi_annotated.csv"

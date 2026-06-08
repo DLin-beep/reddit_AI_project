@@ -28,7 +28,7 @@ from flask import Flask, render_template_string, jsonify, send_from_directory
 try:
     from scripts import robustness_checks
     from scripts import test as pipeline_tests
-except ImportError:  # Support `python scripts/run.py` script-mode imports.
+except ImportError:
     import robustness_checks
     import test as pipeline_tests
 
@@ -202,8 +202,8 @@ def clean_generated_output(output_dir):
     if output_dir.exists():
         shutil.rmtree(output_dir, ignore_errors=True)
 
-    # Older versions wrote run artifacts directly under output/. Remove only
-    # those known generated paths so output/latest is the visible current run.
+
+
     if output_dir.resolve() == (OUTPUT_ROOT / "latest").resolve():
         for path in [
             OUTPUT_ROOT / "dashboard.html",
@@ -266,7 +266,7 @@ def find_open_dashboard_port(start_port=DEFAULT_DASHBOARD_PORT, max_tries=1000):
         f"to {start_port + max_tries - 1}."
     )
 
-# --- Configuration & Hyperparameters ---
+
 QUICK_MODE = False
 N_RANDOMIZATION_PERMS = 250 if QUICK_MODE else 1000
 
@@ -434,8 +434,8 @@ def has_ai_broad_mention(text):
         return True
     return has_boundary_token(lowered, AI_BROAD_TOKENS)
 
-# Roles are a subreddit registry and creator-check support layer. The primary
-# ACSI analysis uses continuous scores, not these binary labels.
+
+
 SUBREDDIT_ROLE_GROUPS = {
     "treatment": (
         "writing", "worldbuilding", "shortstories", "screenwriting", "poetry",
@@ -527,7 +527,7 @@ N_POST_MONTHS = int(len(POST_MONTHS))
 STABLE_CREATOR_PRE_MONTHS = ALL_MONTHS[ALL_MONTHS < STABLE_CREATOR_PRE_END_MONTH]
 N_STABLE_CREATOR_PRE_MONTHS = int(len(STABLE_CREATOR_PRE_MONTHS))
 
-# --- Utils ---
+
 def iter_subreddits():
     if ACTIVE_SUBREDDITS is None:
         return list(SUBREDDITS.keys())
@@ -1046,7 +1046,7 @@ def load_acsi_scores():
 
 load_gse_scores = load_acsi_scores
 
-# --- Parsing & Cleaning ---
+
 def parse_posts():
     print("\n=== Step 1a: parse posts ===")
     frames = []
@@ -1797,9 +1797,9 @@ def run_analysis(df_all=None, creators=None, _unused_activity_frame=None, acsi_s
         "q3_engagement": None,
     }
 
-    # ------------------------------------------------------------------
-    # MAIN: AI Content Substitutability dose-response models
-    # ------------------------------------------------------------------
+
+
+
     results["acsi_component_correlations"] = compute_acsi_component_correlation(acsi_scores)
     if results["acsi_component_correlations"]:
         print(f"\n--- {INDEX_SHORT} measurement diagnostics: component correlations saved ---")

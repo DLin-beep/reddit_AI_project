@@ -179,8 +179,8 @@ def prepare_acsi_dimension_diagnostics_panel(output_dir=None, panel=None, score_
     ]
     scores = scores[[column for column in keep_cols if column in scores.columns]].copy()
 
-    # Normalize 1-5 component scores to 0-1. For physical/personal constraints,
-    # reverse direction so higher values always mean more AI-substitutable.
+
+
     scores["direct_gen_exp"] = (scores["direct_gen"] - 1) / 4
     scores["usefulness_exp"] = (scores["usefulness"] - 1) / 4
     scores["quality_comp_exp"] = (scores["quality_comp"] - 1) / 4
@@ -7506,9 +7506,9 @@ def compute_author_month_intensive_margin(
         phys_free = np.repeat(meta["phys_free"].astype(float).to_numpy(), len(month_indices))
         post = post_by_month[repeated_months.astype(int)]
 
-        # The balanced, zero-filled panel keeps continuing creators in the risk
-        # set every month. A missing author-subreddit-month is therefore a true
-        # zero-post intensity observation, not an absent row to be dropped.
+
+
+
         return pd.DataFrame({
             "pair_id": repeated_pairs,
             "subreddit": subreddit,
@@ -7528,11 +7528,11 @@ def compute_author_month_intensive_margin(
     ]
     author_stable_pair_ids = pairs.loc[pairs["author_stable_anywhere"], "pair_id"]
 
-    # Stable pair models hold the extensive margin fixed: every kept
-    # author-subreddit pair is observed at least once before and after ChatGPT.
-    # This makes the test conceptually different from exit, entry, and
-    # community-composition checks, which study who remains or enters rather
-    # than how much continuing pair members post.
+
+
+
+
+
     result_rows = []
     models = {}
 
@@ -7675,9 +7675,9 @@ def compute_marginal_participation_decomposition(
         scores.to_csv(score_path, index=False)
 
     if not counts_path.exists() or not pairs_path.exists():
-        # Reuse the intensive-margin cache builder instead of constructing a
-        # massive author-month panel twice. The decomposition only needs
-        # observed pair-month counts plus pair histories.
+
+
+
         compute_author_month_intensive_margin(
             score_path=score_path,
             counts_path=counts_path,
@@ -7777,10 +7777,10 @@ def compute_marginal_participation_decomposition(
         ].min()
     )
 
-    # Full-period groups decompose community volume into stable versus marginal
-    # participation. Groups such as pre-only and post-only use future behavior,
-    # so their coefficients are descriptive decomposition evidence rather than
-    # stand-alone causal tests.
+
+
+
+
     pairs["is_stable_pairs"] = pairs["stable_pair"]
     pairs["is_nonstable_pairs"] = ~pairs["stable_pair"]
     pairs["is_preonly_pairs"] = (pairs["pre_pair_posts"] > 0) & (pairs["post_pair_posts"] == 0)
@@ -7797,8 +7797,8 @@ def compute_marginal_participation_decomposition(
         labels=["low", "middle", "high"],
     )
     pairs["is_high_frequency_top_tercile_pairs"] = pairs["frequency_tercile"].astype(str).eq("high")
-    # This alternative marginality definition is based only on pre-shock behavior:
-    # authors with exactly one pre-shock post in the author-subreddit pair.
+
+
     pairs["is_pre_low_frequency_pairs"] = pairs["pre_pair_posts"].eq(1)
 
     group_definitions = [
@@ -8330,9 +8330,9 @@ def compute_community_vulnerability_prediction(
     if community.empty:
         raise ValueError("No community prediction rows after merging ACSI scores.")
 
-    # This is a diagnostic prediction exercise, not a new causal design. All
-    # predictors are measured before ChatGPT so the vulnerability score avoids
-    # post-treatment leakage and can speak to platform-risk identification.
+
+
+
     mu_lookup = globals().get("MU_K", {})
     community["subscriber_count"] = community["subreddit"].map(mu_lookup)
     community["subscriber_count_available"] = community["subscriber_count"].notna().astype(int)
@@ -8396,9 +8396,9 @@ def compute_community_vulnerability_prediction(
     marginal_recompute_error = None
     if marginal_panel_found_path is None:
         try:
-            # If the decomposition panel has not been materialized, build the
-            # minimal subreddit-month marginal counts using the existing
-            # decomposition helper so definitions stay identical across analyses.
+
+
+
             marginal_result = compute_marginal_participation_decomposition(
                 score_path=score_path,
                 panel_output_path=marginal_panel_path,
@@ -8741,8 +8741,8 @@ def compute_community_vulnerability_prediction(
         else:
             bottom_cutoff = model_data[outcome].quantile(0.25)
             model_data["actual_bottom_quartile"] = (model_data[outcome] <= bottom_cutoff).astype(float)
-            # Lower fitted changes imply larger predicted vulnerability, so
-            # risk is the negative fitted value for continuous decline outcomes.
+
+
             model_data["predicted_risk_score"] = -model_data["predicted_value"].astype(float)
             model_data["actual_risk_score"] = -model_data[outcome].astype(float)
         if model_data["predicted_risk_score"].nunique(dropna=True) >= 4:
@@ -9210,9 +9210,9 @@ def compute_displaced_contributor_destinations(
     if posts.empty:
         raise ValueError("No ecosystem-clean posts overlap the scored subreddit-month window.")
 
-    # This analysis follows the marginal-participation decomposition by taking
-    # pre-shock author-subreddit pairs as origins and classifying their observed
-    # post-shock destinations inside the same 124-community sample.
+
+
+
     max_posts_per_day = globals().get("MAX_POSTS_PER_DAY", 50)
     start_date = globals().get("START_DATE", datetime(2022, 1, 1))
     end_date_exclusive = globals().get("END_DATE_EXCLUSIVE", datetime(2025, 1, 1))
@@ -9320,8 +9320,8 @@ def compute_displaced_contributor_destinations(
             )
             .dropna(subset=["destination_persfree"])
         )
-        # Origin pairs are defined only with pre-shock behavior to avoid using
-        # future movement to determine who is at risk of displacement.
+
+
         origin_edge_columns = ["origin_pair_id", "author", "origin_subreddit", "origin_persfree"]
         destination_edges = origin_pairs[origin_edge_columns].merge(
             post_author_subreddit,
@@ -9412,14 +9412,14 @@ def compute_displaced_contributor_destinations(
         (origin_pairs["stayed_same_subreddit"] == 0)
         & (origin_pairs["any_other_subreddit_postshock"] == 1)
     ).astype(int)
-    # "Disappeared" means disappeared from the observed 124-community sample,
-    # not from Reddit or the internet.
+
+
     origin_pairs["disappeared_from_sample"] = (
         origin_pairs["postshock_total_posts_sample"] == 0
     ).astype(int)
-    # Movement to higher-context communities is suggestive destination evidence:
-    # it compares observed sampled destinations, not the author's full online
-    # activity or motivation for moving.
+
+
+
     origin_pairs["moved_higher_context"] = (
         (origin_pairs["stayed_same_subreddit"] == 0)
         & origin_pairs["any_other_higher_context"]
@@ -9835,10 +9835,10 @@ def compute_displaced_contributor_primary_origin_robustness(
     if pre_posts.empty:
         raise ValueError("No pre-shock author-origin posts found.")
 
-    # The pair-level analysis can duplicate multi-community users because an
-    # author with pre-shock posts in several subreddits contributes one row per
-    # author-subreddit origin pair. This robustness assigns exactly one
-    # deterministic primary origin to each author.
+
+
+
+
     author_subreddit_pre = (
         pre_posts.groupby(["author", "subreddit"], as_index=False)
         .agg(
@@ -9950,9 +9950,9 @@ def compute_displaced_contributor_primary_origin_robustness(
                 postshock_subreddit_count=("subreddit", "nunique"),
             )
         )
-        # Destination edges compare each author's post-shock sampled activity
-        # to their single primary origin. "Disappeared" below still only means
-        # no observed post-shock post in these 124 communities, not Reddit-wide exit.
+
+
+
         destination_edges = primary[
             ["author_id", "author", "primary_origin_subreddit", "primary_origin_persfree"]
         ].merge(post_author_subreddit, on="author", how="inner")
@@ -10525,10 +10525,10 @@ def compute_destination_choice_set_placebo(
         movers["observed_mean_destination_persfree"] <= movers["origin_persfree"] - 0.05
     ).astype(int)
 
-    # This placebo is needed because high-PersFree origins mechanically have
-    # many lower-PersFree communities in their destination choice set. Comparing
-    # observed movement to random draws from the same origin-specific choice set
-    # separates pure arithmetic availability from actual reallocation.
+
+
+
+
     score_by_subreddit = scores.set_index("subreddit")["pers_free"].astype(float)
     all_subreddits = score_by_subreddit.index.astype(str).to_numpy()
     all_persfree = score_by_subreddit.to_numpy(dtype=float)
@@ -10962,8 +10962,8 @@ def compute_micro_displacement_prediction(
     if panel.empty:
         raise ValueError("No usable author-origin rows for micro displacement prediction.")
 
-    # Prediction features must be measured before ChatGPT so the exercise is
-    # genuinely predictive. Post-shock variables are used only to define labels.
+
+
     panel["pre_posts_origin"] = panel["pre_posts_origin"].astype(float)
     panel["pre_active_months_origin"] = panel["pre_active_months_origin"].clip(lower=1).astype(float)
     panel["log_pre_posts_origin"] = np.log1p(panel["pre_posts_origin"])
@@ -11007,8 +11007,8 @@ def compute_micro_displacement_prediction(
     panel["disappeared_from_sample"] = panel["disappeared_from_sample"].astype(int)
     panel["moved_other_subreddit"] = panel["moved_other_subreddit"].astype(int)
     panel["moved_higher_context"] = panel["moved_higher_context"].astype(int)
-    # This captures a low-commitment post-shock continuation of the origin pair:
-    # the author remains observable in the origin subreddit, but only once.
+
+
     panel["marginal_postshock_pair"] = (
         (panel["same_subreddit_postshock_posts"].fillna(0) > 0)
         & (panel["same_subreddit_postshock_posts"].fillna(0) <= 1)
@@ -11221,9 +11221,9 @@ def compute_micro_displacement_prediction(
         raise ValueError("No complete rows for micro displacement prediction models.")
 
     folds = grouped_subreddit_folds(model_panel["origin_subreddit"], n_folds)
-    # Grouped cross-validation holds out entire origin subreddits, avoiding the
-    # leakage that would happen if rows from the same community appeared in both
-    # train and test splits.
+
+
+
     for outcome in outcomes:
         if model_panel[outcome].nunique(dropna=True) < 2:
             continue
@@ -11294,9 +11294,9 @@ def compute_micro_displacement_prediction(
         "origin_phys_free",
     ]
     coefficient_rows = []
-    # Prediction is complementary to the causal DiD: it asks whether pre-shock
-    # covariates classify vulnerable relationships, not whether ChatGPT caused
-    # the post-shock change.
+
+
+
     for outcome in outcomes:
         lpm_data = model_panel.dropna(subset=[outcome] + lpm_terms + ["origin_subreddit"]).copy()
         if lpm_data.empty or lpm_data[outcome].nunique(dropna=True) < 2:
@@ -12124,8 +12124,8 @@ def compute_micro_level_prediction(
     ]
     category_term = " + C(origin_category)" if category_features else ""
     coefficient_rows = []
-    # This is a diagnostic prediction exercise: all predictors are pre-shock,
-    # and post-shock behavior is used only to define labels for fragile ties.
+
+
     for outcome in outcomes:
         lpm_data = model_sample.dropna(subset=[outcome] + lpm_terms + ["origin_subreddit"]).copy()
         if lpm_data.empty or lpm_data[outcome].nunique(dropna=True) < 2:
@@ -12494,8 +12494,8 @@ def compute_micro_prediction_heterogeneity(
         panel["log_pre_posts_origin"] = np.log1p(panel["pre_posts_origin"].astype(float))
     panel["log_pre_posts_origin"] = pd.to_numeric(panel["log_pre_posts_origin"], errors="coerce")
 
-    # All weak-tie indicators are defined with pre-shock behavior only. Post-
-    # shock variables enter only as labels for fragility or destination outcomes.
+
+
     panel["one_pre_post"] = panel["pre_posts_origin"].eq(1).astype(int)
     panel["one_pre_month"] = panel["pre_active_months_origin"].eq(1).astype(int)
 
@@ -13505,9 +13505,9 @@ def compute_creator_exit_continuous(
     if creator_frame["subreddit"].nunique() < 2:
         raise ValueError("Need at least two subreddits for clustered subreddit FE models.")
 
-    # This full continuous-treatment creator-exit design replaces the hand-labeled
-    # 26-community subset with all scored subreddits, keeping the creator-level
-    # analysis aligned with the main 124-subreddit continuous specification.
+
+
+
     model1 = fit_ols("exit ~ log_pre_rate + C(subreddit)", creator_frame, cluster_col="subreddit")
     model2 = fit_ols(
         "exit ~ log_pre_rate + log_pre_rate:pers_free + C(subreddit)",
