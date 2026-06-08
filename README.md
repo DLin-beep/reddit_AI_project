@@ -8,38 +8,41 @@ pip install -r requirements.txt
 
 ## Data
 
-Drop Reddit `.jsonl` files into the `data/` folder.  
-Files should be named like `r_writing_posts.jsonl` and `r_writing_comments.jsonl`.
+Drop Reddit `.jsonl` files into the `data/raw_files/` folder.
+Files should be named like `r_writing_posts.jsonl`.
 
-The ACSI measurement sample lives in `data/acsi_measurement_sample_run1.csv`;
+The ACSI run-1 annotation sample lives in `data/acsi_annotated.csv`;
 subreddit-level component scores live in `data/acsi_scores.csv`.
 
-Raw Reddit files are intentionally kept in `data/`. Derived analysis outputs
-live under `output/latest/`. Full raw rescans may create `data/cache/` with
-reusable monthly aggregates; use `--reuse-gse-panel` when you want to rerun the
-models from `output/latest/subreddit_month_gse_panel.parquet` without recreating
-that cache folder.
+Build and score annotation samples through the single annotation entry point:
+
+```bash
+.venv/bin/python scripts/annotate.py build
+.venv/bin/python scripts/annotate.py next --run 1 -n 10
+.venv/bin/python scripts/annotate.py aggregate
+```
+
+Raw Reddit files are intentionally kept in `data/raw_files/`. Derived analysis outputs
+live under `output/latest/`. The pipeline rebuilds cleaned post data from the
+raw JSONL files on every full run.
 
 ## Run
 
 ```bash
-python scripts/run.py --gse-only --reuse-gse-panel
-```
-
-Other Useful commands:
-
-```bash
-python scripts/run.py --dashboard-only --quick
-python scripts/run.py --gse-only --force-rebuild-gse-panel
-python scripts/run.py --reuse-clean-posts
+.venv/bin/python scripts/run.py
 ```
 
 ## Tests
 
-## Timelime
+```bash
+.venv/bin/python -m pytest
+```
 
-- Pre-shock: Jan 2020 – Nov 2022
+## Timeline
+
+- Full analysis window: Jan 2020 – Dec 2024
+- Pre-shock split-window diagnostic: Jan 2020 – Nov 2022
 - Shock month in models: Dec 2022
-- Post-shock: Dec 2022 – Dec 2024
+- Post-shock split-window diagnostic: Dec 2022 – Dec 2024
 
 ## Subreddits
