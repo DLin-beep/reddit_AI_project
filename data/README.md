@@ -1,6 +1,6 @@
 # Data
 
-The semantic pilot uses a fixed reference sample of 60,000 posts. See [data access](../semantic_pilot/data-access.md) for the corpus, embeddings, and saved sample splits.
+The semantic pilot uses a fixed reference sample of 60,000 posts. The [embeddings](embeddings/README.md) are included here. See [data access](../semantic_pilot/data-access.md) for the post text and saved sample splits.
 
 The existing ACSI workflow uses the following local paths, relative to the repository root:
 

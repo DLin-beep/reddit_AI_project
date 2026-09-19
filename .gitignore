@@ -57,3 +57,13 @@ semantic_pilot/local_data/
 **/*_restricted.*
 *.npy
 *.npz
+
+# Finalized embeddings selected for sharing
+!data/embeddings/
+data/embeddings/*
+!data/embeddings/README.md
+!data/embeddings/post_embedding_shards/
+data/embeddings/post_embedding_shards/*
+!data/embeddings/post_embedding_shards/*.npz
+!data/embeddings/post_embedding_index.csv
+!data/embeddings/embedding_cache_manifest.json

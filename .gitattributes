@@ -11,3 +11,8 @@
 
 # Preserve recorded report bytes so their provenance hashes remain valid.
 semantic_pilot/reports/*.csv -text whitespace=trailing-space,space-before-tab,cr-at-eol
+
+# Keep the original embedding files and their checksums unchanged.
+data/embeddings/post_embedding_shards/*.npz binary
+data/embeddings/post_embedding_index.csv -text whitespace=trailing-space,space-before-tab,cr-at-eol
+data/embeddings/embedding_cache_manifest.json -text

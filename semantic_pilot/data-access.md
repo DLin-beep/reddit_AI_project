@@ -1,6 +1,6 @@
 # Data
 
-Post text, embeddings, saved models, assignments, and individual ratings are stored on Longleaf. Access is arranged separately from this repository.
+The [saved embeddings, index, and manifest](../data/embeddings/README.md) are included in this repository. Post text, saved models, assignments, and individual ratings remain on Longleaf, where access is arranged separately. The table below records the original data locations.
 
 The corpus contains 60,000 posts, with 300 from each of 200 communities. Embeddings use `text-embedding-3-large`, with 3,072 dimensions and unit-length normalization. The saved A/B/C folds contain 20,000 posts each.
 

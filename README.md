@@ -4,8 +4,8 @@ This project studies Reddit participation and post content in relation to AI ava
 
 - [Semantic pilot: methods, code, and results](semantic_pilot/README.md)
 - [Numerical comparison](semantic_pilot/reports/RESULTS.md)
-- [Data access](semantic_pilot/data-access.md)
-- [UNC Azure connection example](examples/README.md)
+- [Saved embeddings](data/embeddings/README.md)
+- [Other project data](semantic_pilot/data-access.md)
 
 Raw data are held separately. The [data guide](data/README.md) describes the local files used by the existing [analysis scripts](scripts/).
 
