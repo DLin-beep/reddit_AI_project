@@ -1,0 +1,41 @@
+name: Semantic pilot tests
+
+on:
+  push:
+    paths:
+      - 'semantic_pilot/**'
+      - '.github/workflows/semantic-pilot-tests.yml'
+  pull_request:
+    paths:
+      - 'semantic_pilot/**'
+      - '.github/workflows/semantic-pilot-tests.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  synthetic-tests:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    defaults:
+      run:
+        working-directory: semantic_pilot
+    env:
+      OMP_NUM_THREADS: '1'
+      OPENBLAS_NUM_THREADS: '1'
+      MKL_NUM_THREADS: '1'
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7
+        with:
+          python-version: '3.12'
+          cache: pip
+          cache-dependency-path: |
+            semantic_pilot/requirements-semantic-pilot.txt
+            semantic_pilot/requirements-azure-semantic-pilot.txt
+      - name: Install test dependencies
+        run: python -m pip install -r requirements-azure-semantic-pilot.txt pytest
+      - name: Run synthetic tests (no credentials or private data)
+        run: python -m pytest code/tests -q

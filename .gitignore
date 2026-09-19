@@ -28,7 +28,6 @@ data/*
 !data/
 !data/README.md
 !data/acsi_data_rubric.md
-!data/acsi_scores.csv
 
 # Generated outputs and caches
 output/
@@ -45,3 +44,16 @@ data/cache/
 *.tmp
 tmp/
 temp/
+
+# Semantic pilot private inputs, saved models, and review records
+semantic_pilot/experiments/
+semantic_pilot/local_data/
+**/restricted_key/
+**/post_embedding_shards/
+**/post_embedding_index.csv
+**/embedding_cache_manifest.json
+**/human_reviews.csv
+**/roles.csv
+**/*_restricted.*
+*.npy
+*.npz

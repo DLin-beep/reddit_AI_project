@@ -1,0 +1,59 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Sample based semantic region description",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "sample_description", "patterns", "other_content", "uninterpretable_posts", "uncertainties"],
+  "properties": {
+    "schema_version": {"const": 1},
+    "sample_description": {"type": "string", "minLength": 1},
+    "patterns": {
+      "type": "array", "maxItems": 5,
+      "items": {
+        "type": "object", "additionalProperties": false,
+        "required": ["pattern_description", "post_ids", "evidence"],
+        "properties": {
+          "pattern_description": {"type": "string", "minLength": 1},
+          "post_ids": {"type": "array", "minItems": 2, "uniqueItems": true, "items": {"$ref": "#/$defs/post_id"}},
+          "evidence": {
+            "type": "array", "minItems": 1, "maxItems": 2,
+            "items": {
+              "type": "object", "additionalProperties": false,
+              "required": ["post_id", "excerpt"],
+              "properties": {
+                "post_id": {"$ref": "#/$defs/post_id"},
+                "excerpt": {"type": "string", "minLength": 1}
+              }
+            }
+          }
+        }
+      }
+    },
+    "other_content": {
+      "type": "array",
+      "items": {
+        "type": "object", "additionalProperties": false,
+        "required": ["post_ids", "description"],
+        "properties": {
+          "post_ids": {"type": "array", "minItems": 1, "uniqueItems": true, "items": {"$ref": "#/$defs/post_id"}},
+          "description": {"type": "string", "minLength": 1}
+        }
+      }
+    },
+    "uninterpretable_posts": {
+      "type": "array",
+      "items": {
+        "type": "object", "additionalProperties": false,
+        "required": ["post_id", "reason"],
+        "properties": {
+          "post_id": {"$ref": "#/$defs/post_id"},
+          "reason": {"type": "string", "minLength": 1}
+        }
+      }
+    },
+    "uncertainties": {"type": "array", "maxItems": 3, "items": {"type": "string", "minLength": 1}}
+  },
+  "$defs": {
+    "post_id": {"type": "string", "pattern": "^P[0-9]{2}$"}
+  }
+}

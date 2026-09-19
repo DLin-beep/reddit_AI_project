@@ -1,0 +1,66 @@
+{
+  "schema_version": 2,
+  "name": "semantic_threefold_measurement_pilot_20260914",
+  "input": {
+    "index": "output/azure_semantic_corpus_20260914_inputs/azure_cache_4141107435ef8996/post_embedding_index.csv",
+    "manifest": "output/azure_semantic_corpus_20260914_inputs/azure_cache_4141107435ef8996/embedding_cache_manifest.json",
+    "roles": "output/azure_semantic_corpus_20260914_inputs/roles.csv",
+    "human_reviews": "output/azure_semantic_corpus_20260914_inputs/human_reviews.csv",
+    "shards": "output/azure_semantic_corpus_20260914_inputs/azure_cache_4141107435ef8996/post_embedding_shards",
+    "dimension": 3072,
+    "texts": "experiments/semantic_threefold_20260914/inputs/texts_restricted.csv"
+  },
+  "sampling": {
+    "seed": 20260914,
+    "expected_posts": 60000,
+    "expected_communities": 200,
+    "expected_posts_per_community": 300,
+    "expected_human_reviews": 300
+  },
+  "models": {
+    "k": [
+      10,
+      20
+    ],
+    "seeds": [
+      11,
+      29
+    ],
+    "max_iter": 100,
+    "tolerance": 1e-05,
+    "vmf_kappa_max": 4000.0,
+    "density_neighbors": [
+      15,
+      30
+    ],
+    "density_quantiles": [
+      0.5,
+      0.8
+    ],
+    "density_min_region_size": 30
+  },
+  "resources": {
+    "threads": 16,
+    "fit_wall_limit_seconds": 3600
+  },
+  "interpretation": "Exploratory reference-data measurement comparison using three community-balanced folds. Independently fitted single-fold maps are compared on a disjoint third fold; paired-fold fits assess sample-size sensitivity on the same evaluation fold. Historical data roles are metadata only. Human ratings remain separate and are used for interpretation, not parameter selection. No event responses, causal estimates, new human ratings, automatic winner selection, or final-map freeze.",
+  "input_sha256": {
+    "index": "5dfe1d90c9c8ae10a99e21e4ca6d6da17bd33f0add2996a93592419603f42e29",
+    "manifest": "741a541e1d89bbfbc9d8dd710d1e513ba3af375f2979aab16bf0262076e7e0dd",
+    "roles": "cbc1341eee490b7deda88fcb097c2fb48ea038b884a00cfb4f00c31d7947eafd",
+    "human_reviews": "2f97d8c67b113262023387853cff8be6b1158cb3e1d818cfb2324cd7fea27e63",
+    "texts": "8335dbd63f6fa973a02230751501da7e6c140ed5fa8f80c0921937b5c035e9cb"
+  },
+  "azure_embedding_identity": {
+    "endpoint": "https://azureaiapi.cloud.unc.edu/openai/v1/embeddings",
+    "model": "text-embedding-3-large",
+    "dimensions": null,
+    "encoding": "cl100k_base",
+    "max_input_tokens": 8191,
+    "chunk_overlap_tokens": 128,
+    "pooling": "normalize_each_chunk_then_new_token_weighted_mean_then_L2",
+    "chunks_sha256": "5e9737231ca93698209a9559a82f50e539d141c017d1b2bef1a3177274ee70e9",
+    "prepared_identity_sha256": "02540794db40fc31e0a87c2a60ee6783057f3e75660aaf60c1a99acc06ce347e",
+    "response_model": "text-embedding-3-large"
+  }
+}

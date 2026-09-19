@@ -1,0 +1,2 @@
+-r requirements-semantic-pilot.txt
+tiktoken==0.11.0

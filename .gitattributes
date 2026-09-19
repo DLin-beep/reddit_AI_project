@@ -8,3 +8,6 @@
 *.parquet binary
 *.png binary
 *.pdf binary
+
+# Preserve recorded report bytes so their provenance hashes remain valid.
+semantic_pilot/reports/*.csv -text whitespace=trailing-space,space-before-tab,cr-at-eol

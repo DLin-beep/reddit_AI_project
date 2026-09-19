@@ -1,48 +1,26 @@
-# Reddit GenAI Pipeline
+# Data guide
 
-## Setup
+The public repository contains code and rubrics. The local data paths below describe inputs and generated artifacts; they are not download links or a claim that the data are included.
 
-```bash
-pip install -r requirements.txt
-```
+## Semantic pilot: the same 60,000 posts
 
-## Data
+Use the [semantic data-access guide](../semantic_pilot/data-access.md) to obtain the restricted coauthor handoff and verify corpus identity, text hashes, embedding cache, and saved A/B/C folds. Matching a row count is insufficient: collaborators must use the same post IDs and text versions.
 
-Drop Reddit `.jsonl` files into the `data/raw_files/` folder.
-Files should be named like `r_writing_posts.jsonl`.
+The [semantic pilot](../semantic_pilot/README.md) uses the verified September 14, 2026 Azure corpus. Its prepared review packet contains 1,500 post appearances across four candidate maps, drawn from 549 unique posts; that packet is not the full 60,000-post corpus. The older ACSI files below are a separate workflow and do not establish semantic-corpus identity.
 
-The ACSI run-1 annotation sample lives in `data/acsi_annotated.csv`;
-subreddit-level component scores live in `data/acsi_scores.csv`.
+Raw texts, tokenized content, embedding shards, post-level indexes/assignments, individual ratings, review excerpts, and interpretation keys remain outside this public package. Follow the access guide for the coauthor data handoff.
 
-Build and score annotation samples through the single annotation entry point:
+## Existing ACSI workflow
 
-```bash
-.venv/bin/python scripts/annotate.py build
-.venv/bin/python scripts/annotate.py next --run 1 -n 10
-.venv/bin/python scripts/annotate.py aggregate
-```
+Paths are relative to the repository root:
 
-Raw Reddit files are intentionally kept in `data/raw_files/`. Derived analysis outputs
-live under `output/latest/`. The pipeline rebuilds cleaned post data from the
-raw JSONL files on every full run.
+| Path | Role |
+| --- | --- |
+| `data/raw_files/r_*_posts.jsonl` | Locally supplied Reddit source files, such as `r_writing_posts.jsonl` |
+| `output/latest/posts_clean_all.parquet` | Prepared input used by the default annotation `build` command |
+| `data/acsi_data.csv` | Annotation sample produced by `scripts/annotate.py build` |
+| `data/acsi_annotated.csv` | Run-1 completed annotation records |
+| `data/acsi_scores.csv` | Aggregated subreddit component scores |
+| `output/latest/` | Generated analysis outputs |
 
-## Run
-
-```bash
-.venv/bin/python scripts/run.py
-```
-
-## Tests
-
-```bash
-.venv/bin/python -m pytest
-```
-
-## Timeline
-
-- Full analysis window: Jan 2020 – Dec 2024
-- Pre-shock split-window diagnostic: Jan 2020 – Nov 2022
-- Shock month in models: Dec 2022
-- Post-shock split-window diagnostic: Dec 2022 – Dec 2024
-
-## Subreddits
+Use [the data rubric](acsi_data_rubric.md) with the [annotation entry point](../scripts/annotate.py). Setup and commands are in the [root README](../README.md#existing-acsi-annotation-and-analysis-workflow). The [annotation_code](../annotation_code/) directory preserves the existing supporting scripts and rubric.
